@@ -1,0 +1,78 @@
+"""
+ This program is a warm up for coding. You get used to the coding 
+format and practice some coding skills. 
+"""
+
+############################################# 
+"""
+Copyright (C) 2025  Adrianna M. Gillman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+############################################# 
+
+
+import numpy as np
+import numpy.linalg as la
+import math
+
+def driver():
+
+     n = 2
+     x = np.linspace(0,np.pi,n)
+     z1 = [1,0]
+     z2 = [0,1]
+
+# this is a function handle.  You can use it to define 
+# functions instead of using a subroutine like you 
+# have to in a true low level language.     
+     f = lambda x: x**2 + 4*x + 2*np.exp(x)
+     g = lambda x: 6*x**3 + 2*np.sin(x)
+
+
+     y = f(x)
+     w = g(x)
+
+# evaluate the dot product of y and w     
+     dp = dotProduct(z1,z2,n)
+
+# print the output
+     print('the dot product is : ', dp)
+
+     mdp = MdotProduct(m1,m2,n)
+
+     return
+     
+def dotProduct(x,y,n):
+#   Computes the dot product of the n x 1 vectors x and y
+     dp = 0.
+     for j in range(n):
+        dp = dp + x[j]*y[j]
+
+     return dp  
+
+def MdotProduct(x,y,n):
+#   Computes the dot product of the n x 1 vectors x and y
+     dp = 0.
+     matrix = np.zeroes((n,n))
+
+     for i in range(n):
+        dp = 0
+        for j in range(n):
+          dp = dp + x[i,j]*y[j,i]
+
+
+     return dp  
+     
+driver()               
