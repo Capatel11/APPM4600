@@ -8,5 +8,5 @@ p2 = lambda x: (x-2)**9
 
 x = np.arange(1.920, 2.081, 0.001)
 
-plt.plot(x, p(x))
+plt.plot(x, p2(x))
 plt.show()
