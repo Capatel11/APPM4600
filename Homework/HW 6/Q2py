@@ -1,0 +1,66 @@
+import numpy as np
+np.seterr(all="ignore")   # hide overflow warnings when a method diverges
+
+def F(v):
+    x, y = v
+    return np.array([x**2 + y**2 - 4,
+                     np.exp(x) + y - 1])
+
+def J(v):
+    x, y = v
+    return np.array([[2*x,       2*y],
+                     [np.exp(x), 1  ]])
+
+tol = 1e-10
+maxit = 100
+
+def newton(v):
+    for n in range(maxit):
+        v_new = v - np.linalg.solve(J(v), F(v))
+        if np.linalg.norm(v_new - v) < tol:
+            return v_new, n+1
+        v = v_new
+    return None, maxit
+
+def lazy_newton(v):
+    J0 = J(v)                      # Jacobian computed only once
+    for n in range(maxit):
+        v_new = v - np.linalg.solve(J0, F(v))
+        if not np.all(np.isfinite(v_new)):
+            return None, n+1
+        if np.linalg.norm(v_new - v) < tol:
+            return v_new, n+1
+        v = v_new
+    return None, maxit
+
+def broyden(v):
+    B = J(v)                       # initial Jacobian, then updated cheaply
+    Fv = F(v)
+    for n in range(maxit):
+        s = -np.linalg.solve(B, Fv)
+        v_new = v + s
+        if not np.all(np.isfinite(v_new)):
+            return None, n+1
+        if np.linalg.norm(s) < tol:
+            return v_new, n+1
+        F_new = F(v_new)
+        yk = F_new - Fv
+        B = B + np.outer(yk - B @ s, s) / (s @ s)   # Broyden update
+        v, Fv = v_new, F_new
+    return None, maxit
+
+guesses = [(1, 1), (1, -1), (0, 0)]
+
+for name, method in [("Newton", newton), ("Lazy Newton", lazy_newton), ("Broyden", broyden)]:
+    print(name)
+    for g in guesses:
+        try:
+            v, n = method(np.array(g, dtype=float))
+        except np.linalg.LinAlgError:
+            print(f"  start {g}: failed (singular Jacobian)")
+            continue
+        if v is None:
+            print(f"  start {g}: failed (diverged)")
+        else:
+            print(f"  start {g}: root = {v}, iterations = {n}")
+    print()
