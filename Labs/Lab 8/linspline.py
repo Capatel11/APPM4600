@@ -75,9 +75,7 @@ def driver():
 
 
 def eval_line(x0,f0,x1,f1,alpha):
-    '''PRE-LAB: evaluate the line through (x0,f0) and (x1,f1) at alpha.
-       Slope m = (f1-f0)/(x1-x0); the line is  f0 + m*(alpha-x0).
-       Works for a scalar alpha or a numpy array of points.'''
+    '''PRE-LAB: evaluate the line through (x0,f0) and (x1,f1) at alpha.'''
     m = (f1-f0)/(x1-x0)
     return f0 + m*(alpha-x0)
 
